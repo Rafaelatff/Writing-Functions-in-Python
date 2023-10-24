@@ -53,3 +53,77 @@ In Python, **integers are inmutable**.
 | tuple | functions |
 | frozenset | almost everything else |
 | None | .. |
+
+## Context managers
+
+With context managers, it goes to the function and when it finishes, it removes the context of that function.
+
+For example:
+```py
+with open('filename.txt') as file:
+	text = file.read()
+```
+
+I can leave the function withou closing the file.
+
+* with <context-manager>(<args>): 
+or
+* with <context-manager>(<args>) as <returned-value-here>: 
+
+
+* with timer(): 
+At the end, this function will return: "Elapsed: x.xy seconds"
+
+Creating context manager
+
+```py
+# 1. Define a function
+def variable_name():
+
+# 2. (optional) Add any set up code your context needs
+
+# 3. Use the "yield" keyword
+	yield 
+
+# 4. (optional) Add any teardown code your context needs
+""" Database disconnection for example """ 
+
+# 5. Add the '@contextlib.contextmanager' decorator at the top
+```
+Applying those steps:
+
+```py
+@contextlib.contextmanager
+def fnc_name(url_path):
+	db = postgres.connect(url)
+	yield db
+	db.disconnect()
+
+#calling the function
+
+with fnc_name('http://link') as my_db:
+	list = my_db.execute('SELECT * FROM column')
+
+```
+## Nested contexts
+
+This is done by adding a for loop. For example copyting a file:
+
+```py
+def copy(src, dst):
+	with open(src) as f_src:
+		with open(dst, 'w') as f_dst:
+			for line in f_src:
+				f_dst.write(line)
+```
+## Handling erors
+
+we can use:
+```py
+try:
+	# code that might raise and error
+except:
+	# do something about error
+finally:
+	# code that runs no matter what (disconnection for example)
+```
