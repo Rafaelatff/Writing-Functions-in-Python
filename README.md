@@ -127,3 +127,89 @@ except:
 finally:
 	# code that runs no matter what (disconnection for example)
 ```
+## Functions
+
+Functions are a type of object. Meaning that I can do all the stuff I usually do with objects. Python objects are:
+
+```py
+def x():
+	pass
+
+x = [1,2]
+x = pd.DataFrame()
+variable = x 
+type(variable) # It will return <type 'function'>
+variable() 
+```
+
+I could do stuff like:
+```py
+variable_name = print
+variable_name('Hello') # It will print the message 'Hello'
+```
+
+And also:
+
+```py
+list_of_fnc = [x, open, print]
+list_of_fnc[2]('This message will be printed')
+```
+
+Since function is an object, I can pass the function as argument also.
+
+```py
+def has_docstring(func):
+	return func.__doc__ is not None
+
+def no():
+	return 42
+
+def yes():
+	"""It has docstream"""
+	return 42
+
+has_docstring(no)	# It returns 'False'
+has_docstring(no)	# It returns 'True'
+```
+
+## Referencing a function
+
+When I just call ```my_func()```, I am calling the function and it will run the code inside it. When I type ```my_func```, I am referencing the function itself. In the last case it will return the message <function my_func at 0x012345678912>.
+
+## Scope
+
+Scope determine which variables can be accessed at different points of your code.
+Variable are search first inside the **Local scope** (inside the function), then, if he can't find, the variable will be looked on the **Global scope**. If interpreter can't find in both, it will be searched on the **Builtin scope**.
+
+When we want to call a value outside the function, we need:
+
+```py
+x = 7
+
+def foo():
+	global x
+	x = 42
+	print(x) # it will return 42
+
+print(x) # it will also return 42, not 7!!
+```
+
+Note: If I were inside a nested function, I should use ```nonlocal``` instead of ```global```.
+
+## Closure
+![image](https://github.com/Rafaelatff/Writing-Functions-in-Python/assets/58916022/97d03f6e-f1f1-4496-87ca-05bf70bd59be)
+
+## Decorators
+
+Better seing in practice:
+
+```py
+@double_args # Note that I need to define this function also
+def multiply(a,b)
+	return a*b
+
+multiply(1,5) # It will return 20, because of the @double_args decorator
+
+```
+
+![image](https://github.com/Rafaelatff/Writing-Functions-in-Python/assets/58916022/400d7966-1e29-413b-9894-1bf0b40e5e4c)
