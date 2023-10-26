@@ -201,6 +201,7 @@ Note: If I were inside a nested function, I should use ```nonlocal``` instead of
 
 ## Decorators
 
+Decorators are used when we want to add common behaviour for multiple functions.
 Better seing in practice:
 
 ```py
@@ -213,3 +214,85 @@ multiply(1,5) # It will return 20, because of the @double_args decorator
 ```
 
 ![image](https://github.com/Rafaelatff/Writing-Functions-in-Python/assets/58916022/400d7966-1e29-413b-9894-1bf0b40e5e4c)
+
+Now, let's time a function, by creating a decorator that checks how long the function being called takes to run.
+
+```py
+import time
+
+def timer(func):
+	"""A decorator that prints how long a function took to run."""
+	def wrapper(*args, **kwargs): # Takes all number of position and key args 
+		# Get the current time		
+		t_start = time.time()
+		# Call the function and store the result
+		result = func(*args, **kwargs)	
+		# Get the time that it takes
+		t_total = time.time() - t_start
+		print('{} took {}s'.format(func.__name__, t_total)) ## __name__ return its name, __defaults__ returns default args
+		# Different function I could use: return func(*args, **kwargs)
+		return result
+	return wrapper
+```
+
+Now testing:
+
+```py
+@timer
+def sleep_n_seconds(n):
+	time.sleep(n)
+
+sleep_n_seconds(5)
+# For example it would return 'sleep_n_seconds took 5.00509..s'
+```
+
+![image](https://github.com/Rafaelatff/Writing-Functions-in-Python/assets/58916022/6cc8d108-9ec8-4f17-809b-b23951bc62c4)
+
+![image](https://github.com/Rafaelatff/Writing-Functions-in-Python/assets/58916022/aedd5163-1fe9-40ef-a1b2-8491ede493c4)
+
+## Decorators and metadata
+
+It can generate problemns with the docstrings, name, defaults.
+Usually it tries to return the metadata from the wrapper function.
+To fix that:
+
+```py
+import functools import wraps
+
+...
+# And becore calling the wrapper function:
+	@wraps(func)
+	def wrapper(*args, **kwargs):
+```
+
+## Decorator that receives the function + arguments:
+
+```py
+def run_n_times(n)
+	def decorator(func):
+		def wrapper(*args, **kwargs):
+			for i in range(n):	
+				func(*args, **kwargs)
+			return wrapper
+		return decorator
+
+```
+
+Both works:
+
+```py
+@run_n_times(3)
+def foo():
+
+run_two_times = run_n_times(2)
+
+@run_two_times
+def foo():
+```
+Now let's modify an existing function: 
+
+```py
+print = run_n_times(5)(print)
+
+print('What is happening?!?!') # It will print 5 times
+```
